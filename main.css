@@ -1,0 +1,23 @@
+body {
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+#chatbox {
+  width: 800px;
+  height: 100px;
+  overflow-y: scroll;
+
+  background-color: rgb(49, 49, 49);
+  color: rgb(209, 209, 209);
+}
+
+#chatbox-input {
+  width: 730px;
+  padding: 0.5rem;
+}
+
+ul {
+  padding-left: 0;
+  list-style: none;
+}
