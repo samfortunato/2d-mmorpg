@@ -4,12 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": ".\\node_modules\\.bin\\watchify index.js -o bundle.js -v"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "browserify": "^17.0.0",
+    "uuid": "^8.3.2",
+    "watchify": "^4.0.0",
     "ws": "^7.4.4"
   }
 }
