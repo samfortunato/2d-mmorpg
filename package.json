@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "browserify": "^17.0.0",
+    "dotenv": "^8.2.0",
     "uuid": "^8.3.2",
     "watchify": "^4.0.0",
     "ws": "^7.4.4"

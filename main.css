@@ -3,6 +3,11 @@ body {
   font-size: 14px;
 }
 
+main {
+  width: 850px;
+  margin: 0 auto;
+}
+
 #chatbox {
   width: 800px;
   height: 100px;

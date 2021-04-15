@@ -1,13 +1,15 @@
 const WebSocket = require('ws');
 
 class Player {
-  updatedAt;
-  xPos;
-  yPos;
 
-  constructor(id) {
-    this.id = id;
+  constructor(data) {
+    this.id = data.id;
+    this.xPos = data.xPos;
+    this.yPos = data.yPos;
+    this.updatedAt = data.updatedAt;
+    this.name = data.name;
   }
+
 }
 
 const webSocketServer = new WebSocket.Server({ port: 8081 });
@@ -20,14 +22,17 @@ webSocketServer.on('connection', (webSocket) => {
     let payload;
 
     if (parsed.type === 'chat') {
-      const chatData = { type: 'chat', text: parsed.text, timeStamp: parsed.timeStamp, playerId: parsed.playerId };
+      const chatData = {
+        type: 'chat',
+        text: parsed.text,
+        timeStamp: parsed.timeStamp,
+        playerId: parsed.playerId,
+        name: parsed.name,
+      };
 
       payload = JSON.stringify(chatData);
     } else {
-      players[parsed.id] = players[parsed.id] || new Player(parsed.id);
-      players[parsed.id].xPos = parsed.xPos;
-      players[parsed.id].yPos = parsed.yPos;
-      players[parsed.id].updatedAt = parsed.updatedAt;
+      players[parsed.id] = new Player(parsed);
 
       purgeOfflinePlayers();
 
@@ -44,7 +49,7 @@ webSocketServer.on('connection', (webSocket) => {
 
 function purgeOfflinePlayers() {
   for (const player of Object.values(players)) {
-    if (Date.now() - player.updatedAt > 100) {
+    if (Date.now() - player.updatedAt > 1000) {
       delete players[player.id];
     }
   }
