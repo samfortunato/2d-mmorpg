@@ -20,13 +20,15 @@ export class Game {
   }
 
   start() {
+    // TODO: setup global deltaTime
+
     const entities = GlobalStateManager.instance().getEntities();
+
+    this.handlers.forEach(handler => handler.update());
 
     Object.values(entities).forEach(entity => {
       if (entity.update) entity.update();
     });
-
-    this.handlers.forEach(handler => handler.update());
 
     requestAnimationFrame(this.start.bind(this));
   }

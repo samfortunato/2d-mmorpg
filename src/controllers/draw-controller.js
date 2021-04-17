@@ -26,6 +26,8 @@ export class DrawController {
 
   setupCtx() {
     this.ctx = this.canvas.getContext('2d');
+
+    this.ctx.imageSmoothingEnabled = false;
   }
 
   clearCanvas() {
@@ -36,7 +38,8 @@ export class DrawController {
 
   drawEntities(entities) {
     for (const entity of Object.values(entities)) {
-      const playerEntity = new Player(entity);
+      const playerEntity = entity instanceof Player ? entity : new Player(entity);
+      playerEntity.sprite.update(playerEntity.direction);
 
       this.drawEntity(playerEntity);
       this.drawUsername(playerEntity);
@@ -44,13 +47,16 @@ export class DrawController {
   }
 
   drawEntity(entity) {
-    this.ctx.drawImage(entity.sprite.img, 48, 128, 48, 64, entity.xPos, entity.yPos, 48, 64);
+    const [sx, sy, sw, sh] = entity.sprite.currentCrop;
+
+    this.ctx.drawImage(entity.sprite.img, sx, sy, sw, sh, entity.xPos, entity.yPos, 48, 64);
   }
 
   drawUsername(entity) {
     this.ctx.fillStyle = 'black';
     this.ctx.textAlign = 'center';
     this.ctx.font = '11px sans-serif';
+
     const text = entity.name || entity.id;
     this.ctx.fillText(text, entity.xPos + 1 + (48 / 2), entity.yPos - 10);
   }

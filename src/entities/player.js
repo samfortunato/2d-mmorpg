@@ -14,7 +14,8 @@ export class Player {
 
     this.xPos = params.xPos || 100;
     this.yPos = params.yPos || 100;
-    this.speed = 3;
+    this.direction = params.direction || 'DOWN';
+    this.speed = 4;
 
     this.sprite = new Sprite();
   }
@@ -23,10 +24,25 @@ export class Player {
     const pressedKeys = GlobalStateManager.instance().getPressedKeys();
 
     if (document.activeElement !== document.querySelector('#chatbox-input')) {
-      if (pressedKeys['ArrowUp'] || pressedKeys['w']) this.yPos -= this.speed;
-      if (pressedKeys['ArrowRight'] || pressedKeys['d']) this.xPos += this.speed;
-      if (pressedKeys['ArrowDown'] || pressedKeys['s']) this.yPos += this.speed;
-      if (pressedKeys['ArrowLeft'] || pressedKeys['a']) this.xPos -= this.speed;
+      if (pressedKeys['ArrowUp'] || pressedKeys['w']) {
+        this.yPos -= this.speed;
+        this.direction = 'UP';
+      }
+
+      if (pressedKeys['ArrowRight'] || pressedKeys['d']) {
+        this.xPos += this.speed;
+        this.direction = 'RIGHT';
+      }
+
+      if (pressedKeys['ArrowDown'] || pressedKeys['s']) {
+        this.yPos += this.speed;
+        this.direction = 'DOWN';
+      }
+
+      if (pressedKeys['ArrowLeft'] || pressedKeys['a']) {
+        this.xPos -= this.speed;
+        this.direction = 'LEFT';
+      }
     }
 
     EventManager.instance().dispatch(playerMove({
@@ -34,8 +50,11 @@ export class Player {
       name: this.name,
       xPos: this.xPos,
       yPos: this.yPos,
+      direction: this.direction,
       updatedAt: Date.now(),
     }));
+
+    this.sprite.update(this.direction);
   }
 
 }

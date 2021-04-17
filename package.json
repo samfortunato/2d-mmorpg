@@ -15,10 +15,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "browserify": "^17.0.0",
     "dotenv": "^8.2.0",
     "uuid": "^8.3.2",
-    "watchify": "^4.0.0",
     "ws": "^7.4.4"
   },
   "devDependencies": {
@@ -29,7 +27,6 @@
     "babel-loader": "^8.2.2",
     "css-loader": "^5.2.2",
     "nodemon": "^2.0.7",
-    "sourceify": "^1.0.0",
     "style-loader": "^2.0.0",
     "webpack": "^5.33.2",
     "webpack-cli": "^4.6.0"

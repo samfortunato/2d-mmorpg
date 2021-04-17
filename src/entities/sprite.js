@@ -10,35 +10,35 @@ class Sprite {
     this.state = STATES.IDLE;
     this.img = new Image();
     this.img.src = './img/characters.gif';
-    this.currentCrop = [0, 0, 0, 0];
+    this.currentCrop = [48, 128, 48, 64];
 
     this.playerInfo = {};
   }
 
-  update(playerInfo) {
-    this.playerInfo = playerInfo;
-
-    switch (this.state) {
-      case STATES.IDLE: {
-        this.updateIdle();
+  update(direction) {
+    switch (direction) {
+      case 'UP': {
+        this.currentCrop = [48, 0, 48, 64];
         break;
       }
 
-      case STATES.WALKING: {
-        this.updateWalking();
+      case 'RIGHT': {
+        this.currentCrop = [48, 64, 48, 64];
         break;
       }
 
-      default: return;
+      case 'DOWN': {
+        this.currentCrop = [48, 128, 48, 64];
+        break;
+      }
+
+      case 'LEFT': {
+        this.currentCrop = [48, 192, 48, 64];
+        break;
+      }
+
+      default: break;
     }
-  }
-
-  updateIdle() {
-    this.currentCrop = [0, 0, 32, 32];
-  }
-
-  updateWalking() {
-
   }
 
 }

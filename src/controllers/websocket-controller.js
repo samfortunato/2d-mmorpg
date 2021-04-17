@@ -4,7 +4,7 @@ import { receivedChatMessage } from '../actions/chat';
 import { updateEntities } from '../actions/entity';
 
 import { PLAYER_MOVE } from '../constants/action-types/player';
-import { SEND_MESSAGE, RECEIVED_CHAT_MESSAGE } from '../constants/action-types/chat';
+import { SEND_MESSAGE } from '../constants/action-types/chat';
 
 export class WebsocketController {
 
