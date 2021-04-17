@@ -1,0 +1,1 @@
+export const CHANGE_PLAYER_NAME = 'CHANGE_PLAYER_NAME';

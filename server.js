@@ -26,7 +26,7 @@ webSocketServer.on('connection', (webSocket) => {
         type: 'chat',
         text: parsed.text,
         timeStamp: parsed.timeStamp,
-        playerId: parsed.playerId,
+        id: parsed.id,
         name: parsed.name,
       };
 
@@ -54,3 +54,76 @@ function purgeOfflinePlayers() {
     }
   }
 }
+
+class WebsocketController {
+
+  constructor() {
+    this.webSocketServer = new WebSocket.Server({ port: 8081 });
+    this.players = {};
+
+    this.webSocketServer.on('connection', webSocket => this.processConnection(webSocket));
+  }
+
+  processConnection(webSocket) {
+    webSocket.on('message', message => this.processMessage(message));
+  }
+
+  processMessage(message) {
+    const parsed = JSON.parse(message);
+
+    let payload;
+
+    if (parsed.type === 'chat') {
+      payload = this.parseChatMessage(parsed);
+    } else {
+      this.processPlayers(parsed);
+
+      payload = this.getPlayerStats();
+    }
+
+    this.sendPayload(payload);
+  }
+
+  parseChatMessage(parsed) {
+    const chatData = {
+      type: 'chat',
+      text: parsed.text,
+      timeStamp: parsed.timeStamp,
+      id: parsed.id,
+      name: parsed.name,
+    };
+
+    const payload = JSON.stringify(chatData);
+
+    return payload;
+  }
+
+  getPlayerStats() {
+    return JSON.stringify({ type: 'entity_update', players: this.players });
+  }
+
+  processPlayers(parsed) {
+    players[parsed.id] = new Player(parsed);
+
+    purgeOfflinePlayers();
+  }
+
+  sendPayload(payload) {
+    this.webSocketServer.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(payload);
+      }
+    });
+  }
+
+  purgeOfflinePlayers() {
+    for (const player of Object.values(players)) {
+      if (Date.now() - player.updatedAt > 1000) {
+        delete players[player.id];
+      }
+    }
+  }
+
+}
+
+// new WebsocketController();

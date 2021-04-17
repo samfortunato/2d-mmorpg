@@ -1,165 +1,158 @@
-const { default: uuid } = require('uuid/dist/v4');
+const { Game } = require('./src/entities/game.js');
 
-const canvas = document.createElement('canvas');
-canvas.width = 800;
-canvas.height = 800;
-const ctx = canvas.getContext('2d');
-document.querySelector('main').prepend(canvas);
+// const Player from './src/entities/player.js');
 
-const player = new (class Player {
-  id = uuid();
-  name = '';
+// const canvas = document.createElement('canvas');
+// canvas.width = 800;
+// canvas.height = 800;
+// const ctx = canvas.getContext('2d');
+// document.querySelector('main').prepend(canvas);
 
-  xPos = 100;
-  yPos = 100;
-  width = 32;
-  height = 32;
-  color = 'black';
+// const player = new Player();
 
-  speed = 3;
-});
-player.name = player.id;
+// let entities = {
+//   [player.id]: player,
+// };
 
-let entities = {
-  [player.id]: player,
-};
+// const pressedKeys = {};
+// document.addEventListener('keydown', (evt) => pressedKeys[evt.key] = true);
+// document.addEventListener('keyup', (evt) => pressedKeys[evt.key] = false);
 
-const pressedKeys = {};
-document.addEventListener('keydown', (evt) => pressedKeys[evt.key] = true);
-document.addEventListener('keyup', (evt) => pressedKeys[evt.key] = false);
+// const webSocket = new WebSocket('ws://3.90.50.129:8081'); // prod
+// // const webSocket = new WebSocket('ws://localhost:8081'); // local (lawl)
+// webSocket.addEventListener('message', (evt) => {
+//   const message = JSON.parse(evt.data);
 
-const webSocket = new WebSocket('ws://3.90.50.129:8081'); // prod
-// const webSocket = new WebSocket('ws://localhost:8081'); // local (lawl)
-webSocket.addEventListener('message', (evt) => {
-  const message = JSON.parse(evt.data);
+//   if (message.type === 'chat') {
+//     processChatMessage(evt);
+//   } else {
+//     storeOtherPlayers(evt);
+//   }
+// });
 
-  if (message.type === 'chat') {
-    processChatMessage(evt);
-  } else {
-    storeOtherPlayers(evt);
-  }
-});
+// function processInput() {
+//   if (document.activeElement !== document.querySelector('#chatbox-input')) {
+//     if (pressedKeys.ArrowUp || pressedKeys.w) player.yPos -= player.speed;
+//     if (pressedKeys.ArrowRight || pressedKeys.d) player.xPos += player.speed;
+//     if (pressedKeys.ArrowDown || pressedKeys.s) player.yPos += player.speed;
+//     if (pressedKeys.ArrowLeft || pressedKeys.a) player.xPos -= player.speed;
+//   }
 
-function processInput() {
-  if (document.activeElement !== document.querySelector('#chatbox-input')) {
-    if (pressedKeys.ArrowUp || pressedKeys.w) player.yPos -= player.speed;
-    if (pressedKeys.ArrowRight || pressedKeys.d) player.xPos += player.speed;
-    if (pressedKeys.ArrowDown || pressedKeys.s) player.yPos += player.speed;
-    if (pressedKeys.ArrowLeft || pressedKeys.a) player.xPos -= player.speed;
-  }
+//   if (webSocket.readyState === webSocket.OPEN) {
+//     webSocket.send(JSON.stringify({
+//       id: player.id,
+//       name: player.name,
+//       xPos: player.xPos,
+//       yPos: player.yPos,
+//       updatedAt: Date.now()
+//     }));
+//   }
+// }
 
-  if (webSocket.readyState === webSocket.OPEN) {
-    webSocket.send(JSON.stringify({
-      id: player.id,
-      name: player.name,
-      xPos: player.xPos,
-      yPos: player.yPos,
-      updatedAt: Date.now()
-    }));
-  }
-}
+// function storeOtherPlayers(evt) {
+//   const { players } = JSON.parse(evt.data);
 
-function storeOtherPlayers(evt) {
-  const { players } = JSON.parse(evt.data);
+//   entities = {
+//     [player.id]: player,
+//     ...players,
+//   };
+// }
 
-  entities = {
-    [player.id]: player,
-    ...players,
-  };
-}
+// function drawEntities(entities) {
+//   for (const entity of Object.values(entities)) {
+//     if (entity.id !== player.id) {
+//       drawEntity(new Player(entity));
+//     }
+//   }
+// }
 
-function drawEntities(entities) {
-  for (const entity of Object.values(entities)) {
-    if (entity.id !== player.id) {
-      drawEntity(entity);
-    }
-  }
-}
+// function drawEntity(entity) {
+//   ctx.drawImage(entity.sprite.img, 48, 128, 48, 64, entity.xPos, entity.yPos, 48, 64);
 
-function drawEntity(entity) {
-  const text = entity.name || 'foo';
-  const fillStyle = entity.color || 'black';
-  const width = entity.width || 32;
-  const height = entity.height || 32;
+//   ctx.fillStyle = 'black';
+//   ctx.textAlign = 'center';
+//   ctx.font = '11px sans-serif';
+//   const text = entity.name || entity.id;
+//   ctx.fillText(text, entity.xPos + 1 + (48 / 2), entity.yPos - 10);
+// }
 
-  ctx.fillStyle = fillStyle;
-  ctx.fillRect(entity.xPos, entity.yPos, width, height);
+// function runGame() {
+//   processInput();
 
-  ctx.fillText(text, entity.xPos, entity.yPos - 10);
-}
+//   ctx.clearRect(0, 0, canvas.width, canvas.height);
+//   ctx.fillStyle = 'grey';
+//   ctx.fillRect(0, 0, canvas.width, canvas.height);
+//   drawEntity(player);
+//   drawEntities(entities);
 
-function runGame() {
-  processInput();
+//   requestAnimationFrame(runGame);
+// }
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = 'grey';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  drawEntity(player);
-  drawEntities(entities);
+// runGame();
 
-  requestAnimationFrame(runGame);
-}
+// const chatbox = document.querySelector('#chatbox');
+// const chatboxList = document.querySelector('#chatbox ul');
+// const chatboxField = document.querySelector('#chatbox-field');
+// const chatboxInput = document.querySelector('#chatbox-input');
+// chatboxField.addEventListener('submit', (evt) => {
+//   evt.preventDefault();
 
-runGame();
+//   if (chatboxInput.value) {
+//     if (/^\/nick/.test(chatboxInput.value)) {
+//       const name = chatboxInput.value.split('/nick ')[1];
+//       player.name = name;
+//       localStorage.setItem('name', name);
+//     } else {
+//       webSocket.send(JSON.stringify({
+//         type: 'chat',
+//         text: chatboxInput.value,
+//         timeStamp: evt.timeStamp,
+//         id: player.id,
+//         name: player.name,
+//       }));
 
-const chatbox = document.querySelector('#chatbox');
-const chatboxList = document.querySelector('#chatbox ul');
-const chatboxField = document.querySelector('#chatbox-field');
-const chatboxInput = document.querySelector('#chatbox-input');
-chatboxField.addEventListener('submit', (evt) => {
-  evt.preventDefault();
+//       appendNewChatMessage({ text: chatboxInput.value, name: player.name });
+//     }
 
-  if (chatboxInput.value) {
-    if (/^\/nick/.test(chatboxInput.value)) {
-      const name = chatboxInput.value.split('/nick ')[1];
-      player.name = name;
-    } else {
-      webSocket.send(JSON.stringify({
-        type: 'chat',
-        text: chatboxInput.value,
-        timeStamp: evt.timeStamp,
-        playerId: player.id,
-        name: player.name,
-      }));
+//     chatboxInput.blur();
+//     chatboxInput.value = '';
+//   }
+// });
 
-      appendNewChatMessage({ text: chatboxInput.value, name: player.name });
-    }
+// function appendNewChatMessage(message) {
+//   const chatMessage = document.createElement('li');
+//   chatMessage.textContent = `${message.name}: ${message.text}`;
 
-    chatboxInput.blur();
-    chatboxInput.value = '';
-  }
-});
+//   chatboxList.appendChild(chatMessage);
+//   chatbox.scrollTop = chatbox.scrollHeight;
+// }
 
-function appendNewChatMessage(message) {
-  const chatMessage = document.createElement('li');
-  chatMessage.textContent = `${message.name}: ${message.text}`;
+// document.addEventListener('keydown', (evt) => {
+//   if (evt.key === 't' && document.activeElement !== chatboxInput) {
+//     evt.preventDefault();
 
-  chatboxList.appendChild(chatMessage);
-  chatbox.scrollTop = chatbox.scrollHeight;
-}
+//     chatboxInput.focus();
+//     chatboxInput.value = '';
+//   }
 
-document.addEventListener('keydown', (evt) => {
-  if (evt.key === 't' && document.activeElement !== chatboxInput) {
-    evt.preventDefault();
+//   if (evt.key === '/' && document.activeElement !== chatboxInput) {
+//     chatboxInput.focus();
+//   }
 
-    chatboxInput.focus();
-    chatboxInput.value = '';
-  }
+//   if (evt.key === 'Escape') {
+//     chatboxInput.value = '';
+//     chatboxInput.blur();
+//   }
+// });
 
-  if (evt.key === '/' && document.activeElement !== chatboxInput) {
-    chatboxInput.focus();
-  }
+// function processChatMessage(evt) {
+//   const message = JSON.parse(evt.data);
 
-  if (evt.key === 'Escape') {
-    chatboxInput.value = '';
-    chatboxInput.blur();
-  }
-});
+//   if (message.id !== player.id) {
+//     console.log({ messageId: message.id, playerId: player.id });
 
-function processChatMessage(evt) {
-  const message = JSON.parse(evt.data);
+//     appendNewChatMessage(message);
+//   }
+// }
 
-  if (message.playerId !== player.id) {
-    appendNewChatMessage(message);
-  }
-}
+new Game().start();
