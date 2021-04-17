@@ -5,7 +5,7 @@ const { Player } = require('./player');
 class WebsocketController {
 
   constructor() {
-    this.webSocketServer = new WebSocket.Server({ port: 8081 });
+    this.webSocketServer = new WebSocket.Server({ port: 80 });
     this.players = {};
 
     this.webSocketServer.on('connection', this.processConnection.bind(this));
