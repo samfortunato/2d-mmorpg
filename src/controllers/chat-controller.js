@@ -2,7 +2,7 @@ import { EventManager } from '../managers/event-manager';
 import { GlobalStateManager } from '../managers/global-state-manager';
 
 import { sendMessage } from '../actions/chat';
-import { changePlayerName } from '../actions/command';
+import { changePlayerName, changePlayerSprite } from '../actions/command';
 
 import { RECEIVED_CHAT_MESSAGE } from '../constants/action-types/chat';
 import { FIRE_KEY_PRESS } from '../constants/action-types/input';
@@ -50,6 +50,13 @@ export class ChatController {
         const playerName = this.chatboxInput.value.split('/nick ')[1];
 
         EventManager.instance().dispatch(changePlayerName(playerName));
+
+      } else if (/^\/yeb/.test(this.chatboxInput.value)) {
+        EventManager.instance().dispatch(changePlayerSprite('./img/jeb.gif'));
+
+      } else if (/^\/resetsprite/.test(this.chatboxInput.value)) {
+        EventManager.instance().dispatch(changePlayerSprite('./img/characters.gif'));
+
       } else {
         EventManager.instance().dispatch(sendMessage({
           type: 'chat',

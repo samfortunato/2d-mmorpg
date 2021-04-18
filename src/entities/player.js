@@ -1,15 +1,16 @@
-import { v4 as uuid } from 'uuid';
+import { v4 as generateUuid } from 'uuid';
 
 import { EventManager } from '../managers/event-manager';
 import { GlobalStateManager } from '../managers/global-state-manager';
 import { playerMove } from '../actions/player';
+import { CHANGE_PLAYER_SPRITE } from '../constants/action-types/command';
 
 import Sprite from './sprite';
 
 export class Player {
 
   constructor(params = {}) {
-    this.id = params.id || uuid();
+    this.id = params.id || generateUuid();
     this.name = params.name || localStorage.getItem('playerName') || this.id;
 
     this.xPos = params.xPos || 100;
@@ -18,6 +19,19 @@ export class Player {
     this.speed = 4;
 
     this.sprite = new Sprite();
+    this.sprite.img.src = params.spriteUrl || './img/characters.gif';
+
+    EventManager.instance().subscribeTo([CHANGE_PLAYER_SPRITE], this);
+  }
+
+  listen(event) {
+    switch (event.type) {
+      case CHANGE_PLAYER_SPRITE: {
+        this.handleSpriteChange(event.playerSpriteUrl);
+      }
+
+      default: break;
+    }
   }
 
   update() {
@@ -51,10 +65,15 @@ export class Player {
       xPos: this.xPos,
       yPos: this.yPos,
       direction: this.direction,
+      spriteUrl: this.sprite.img.src,
       updatedAt: Date.now(),
     }));
 
     this.sprite.update(this.direction);
+  }
+
+  handleSpriteChange(playerSpriteUrl) {
+    this.sprite.img.src = playerSpriteUrl;
   }
 
 }

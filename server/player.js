@@ -6,6 +6,7 @@ exports.Player = class Player {
     this.xPos = data.xPos;
     this.yPos = data.yPos;
     this.direction = data.direction;
+    this.spriteUrl = data.spriteUrl;
     this.updatedAt = data.updatedAt;
   }
 
