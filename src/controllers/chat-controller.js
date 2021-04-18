@@ -4,8 +4,11 @@ import { GlobalStateManager } from '../managers/global-state-manager';
 import { sendMessage } from '../actions/chat';
 import { changePlayerName, changePlayerSprite } from '../actions/command';
 
+import { escapeHtml } from '../utils/escape-html';
+
 import { RECEIVED_CHAT_MESSAGE } from '../constants/action-types/chat';
 import { FIRE_KEY_PRESS } from '../constants/action-types/input';
+import { EMOTE_IMAGE_URLS, EMOTE_MATCHER } from '../constants/chat';
 
 export class ChatController {
 
@@ -45,22 +48,24 @@ export class ChatController {
   processMessage(evt) {
     evt.preventDefault();
 
-    if (this.chatboxInput.value) {
-      if (/^\/nick/.test(this.chatboxInput.value)) {
-        const playerName = this.chatboxInput.value.split('/nick ')[1];
+    const chatText = escapeHtml(this.chatboxInput.value);
+
+    if (chatText) {
+      if (/^\/nick/.test(chatText)) {
+        const playerName = chatText.split('/nick ')[1];
 
         EventManager.instance().dispatch(changePlayerName(playerName));
 
-      } else if (/^\/yeb/.test(this.chatboxInput.value)) {
+      } else if (/^\/yeb/.test(chatText)) {
         EventManager.instance().dispatch(changePlayerSprite('./img/jeb.gif'));
 
-      } else if (/^\/resetsprite/.test(this.chatboxInput.value)) {
+      } else if (/^\/resetsprite/.test(chatText)) {
         EventManager.instance().dispatch(changePlayerSprite('./img/characters.gif'));
 
       } else {
         EventManager.instance().dispatch(sendMessage({
           type: 'chat',
-          text: this.chatboxInput.value,
+          text: chatText,
           timeStamp: evt.timeStamp,
           playerId: GlobalStateManager.instance().getPlayerMetaInfo().id,
           name: GlobalStateManager.instance().getPlayerMetaInfo().name,
@@ -68,7 +73,7 @@ export class ChatController {
 
         this.appendNewChatMessage({
           name: GlobalStateManager.instance().getPlayerMetaInfo().name,
-          text: this.chatboxInput.value,
+          text: chatText,
         });
       }
 
@@ -78,9 +83,31 @@ export class ChatController {
     }
   }
 
+  parseEmotes(chatText) {
+    let parsedText = chatText;
+
+    const usedEmotes = new Set(chatText.match(EMOTE_MATCHER));
+
+    for (const emote of usedEmotes) {
+      const emoteName = emote.split(':')[1];
+      const emoteUrl = EMOTE_IMAGE_URLS[emoteName];
+
+      if (emoteUrl) {
+        const emoteHtml = `<img class="emote" src="${emoteUrl}" />`;
+        parsedText = parsedText.replaceAll(emote, emoteHtml);
+      }
+    }
+
+    return parsedText;
+  }
+
   appendNewChatMessage(message) {
+    let processedText = escapeHtml(message.text);
+    processedText = this.parseEmotes(processedText);
+
     const chatMessage = document.createElement('li');
-    chatMessage.textContent = `${message.name}: ${message.text}`;
+    chatMessage.className = 'chat-text';
+    chatMessage.innerHTML = `${message.name}: ${processedText}`;
 
     this.chatboxList.appendChild(chatMessage);
     this.chatbox.scrollTop = this.chatbox.scrollHeight;
