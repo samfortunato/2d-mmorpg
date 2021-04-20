@@ -16,7 +16,7 @@ export class Player {
     this.xPos = params.xPos || 100;
     this.yPos = params.yPos || 100;
     this.direction = params.direction || 'DOWN';
-    this.speed = 4;
+    this.speed = 240;
 
     this.sprite = new Sprite();
     this.sprite.img.src = params.spriteUrl || './img/characters.gif';
@@ -35,26 +35,27 @@ export class Player {
   }
 
   update() {
+    const deltaTime = GlobalStateManager.instance().getDeltaTime();
     const pressedKeys = GlobalStateManager.instance().getPressedKeys();
 
     if (document.activeElement !== document.querySelector('#chatbox-input')) {
       if (pressedKeys['ArrowUp'] || pressedKeys['w']) {
-        this.yPos -= this.speed;
+        this.yPos -= this.speed * deltaTime;
         this.direction = 'UP';
       }
 
       if (pressedKeys['ArrowRight'] || pressedKeys['d']) {
-        this.xPos += this.speed;
+        this.xPos += this.speed * deltaTime;
         this.direction = 'RIGHT';
       }
 
       if (pressedKeys['ArrowDown'] || pressedKeys['s']) {
-        this.yPos += this.speed;
+        this.yPos += this.speed * deltaTime;
         this.direction = 'DOWN';
       }
 
       if (pressedKeys['ArrowLeft'] || pressedKeys['a']) {
-        this.xPos -= this.speed;
+        this.xPos -= this.speed * deltaTime;
         this.direction = 'LEFT';
       }
     }

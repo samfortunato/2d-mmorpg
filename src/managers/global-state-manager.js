@@ -55,6 +55,10 @@ export class GlobalStateManager {
     }
   }
 
+  setDeltaTime(deltaTime) {
+    this.state.deltaTime = deltaTime;
+  }
+
   setPressedKeys(pressedKeys) {
     this.state.pressedKeys = pressedKeys;
   }
@@ -70,6 +74,10 @@ export class GlobalStateManager {
     this.state.player.name = playerName;
 
     localStorage.setItem('playerName', playerName);
+  }
+
+  getDeltaTime() {
+    return this.state.deltaTime;
   }
 
   getEntities() {

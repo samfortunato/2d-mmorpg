@@ -59,6 +59,9 @@ export class ChatController {
       } else if (/^\/yeb/.test(chatText)) {
         EventManager.instance().dispatch(changePlayerSprite('./img/jeb.gif'));
 
+      } else if (/^\/mac/.test(chatText)) {
+        EventManager.instance().dispatch(changePlayerSprite('./img/boxdog.gif'));
+
       } else if (/^\/resetsprite/.test(chatText)) {
         EventManager.instance().dispatch(changePlayerSprite('./img/characters.gif'));
 
@@ -76,7 +79,6 @@ export class ChatController {
           text: chatText,
         });
       }
-
 
       this.chatboxInput.blur();
       this.chatboxInput.value = '';
