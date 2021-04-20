@@ -2,7 +2,7 @@ import { EventManager } from '../managers/event-manager';
 import { GlobalStateManager } from '../managers/global-state-manager';
 
 import { sendMessage } from '../actions/chat';
-import { changePlayerName, changePlayerSprite } from '../actions/command';
+import { changePlayerName, changePlayerSprite, toggleMusic } from '../actions/command';
 
 import { escapeHtml } from '../utils/escape-html';
 
@@ -52,7 +52,7 @@ export class ChatController {
 
     if (chatText) {
       if (/^\/nick/.test(chatText)) {
-        const playerName = chatText.split('/nick ')[1];
+        const playerName = chatText.split('/nick ')[1].slice(0, 20);
 
         EventManager.instance().dispatch(changePlayerName(playerName));
 
@@ -64,6 +64,9 @@ export class ChatController {
 
       } else if (/^\/resetsprite/.test(chatText)) {
         EventManager.instance().dispatch(changePlayerSprite('./img/characters.gif'));
+
+      } else if (/^\/audio/.test(chatText)) {
+        EventManager.instance().dispatch(toggleMusic('./audio/earthbound.mp3'));
 
       } else {
         EventManager.instance().dispatch(sendMessage({
