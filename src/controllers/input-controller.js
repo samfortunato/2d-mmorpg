@@ -1,6 +1,9 @@
 import { EventManager } from '../managers/event-manager';
+import { AudioController } from './audio-controller';
 
 import { pressedKeysUpdate, fireKeyPress } from '../actions/input';
+
+import { toggleMusic } from '../actions/command';
 
 export class InputController {
 
@@ -14,6 +17,13 @@ export class InputController {
   update() { }
 
   fireKeydown(key) {
+    // TODO: refactor to not a dumb way of doing this
+    if (!AudioController.instance().hasPlayedForFirstTime) {
+      EventManager.instance().dispatch(toggleMusic('./audio/earthbound.mp3'));
+
+      AudioController.instance().hasPlayedForFirstTime = true;
+    }
+
     this.pressedKeys[key] = true;
 
     EventManager.instance().dispatch(fireKeyPress(key));

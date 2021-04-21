@@ -14,6 +14,7 @@ export class AudioController {
     this.audioPlayer.loop = true;
 
     this.playing = false;
+    this.hasPlayedForFirstTime = false;
 
     EventManager.instance().subscribeTo([TOGGLE_MUSIC], this);
   }
