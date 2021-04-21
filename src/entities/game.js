@@ -7,6 +7,7 @@ import { WebsocketController } from '../controllers/websocket-controller';
 import { DrawController } from '../controllers/draw-controller';
 import { ChatController } from '../controllers/chat-controller';
 import { AudioController } from '../controllers/audio-controller';
+import { PenController } from '../controllers/pen-controller';
 
 export class Game {
 
@@ -16,10 +17,11 @@ export class Game {
       new InputController(),
       // new AuthController(),
       new WebsocketController(),
-      EventManager.instance(),
-      new DrawController(),
+      // PenController.instance(),
+      DrawController.instance(),
       ChatController.instance(),
       AudioController.instance(),
+      EventManager.instance(),
     ];
 
     this.previousTime = 0;

@@ -64,10 +64,19 @@ export class GlobalStateManager {
   }
 
   setEntities(entities) {
-    this.state.entities = {
-      ...entities,
-      [this.state.player.id]: this.state.player,
-    };
+    const otherPlayers = Object.values(entities);
+    const newEntities = {};
+
+    for (const otherPlayer of otherPlayers) {
+      if (otherPlayer.id !== this.state.player.id) {
+        newEntities[otherPlayer.id] = this.state.entities[otherPlayer.id] || new Player(otherPlayer);
+        newEntities[otherPlayer.id].updateParams(otherPlayer);
+      }
+    }
+
+    newEntities[this.state.player.id] = this.state.player;
+
+    this.state.entities = newEntities;
   }
 
   setPlayerName(playerName) {

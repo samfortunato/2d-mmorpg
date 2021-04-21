@@ -1,19 +1,41 @@
 import { GlobalStateManager } from '../managers/global-state-manager';
+import { EventManager } from '../managers/event-manager';
 
 import { Player } from '../entities/player';
 
+import { DRAW_WITH_PEN } from '../constants/action-types/pen';
+
 export class DrawController {
 
+  static _instance = new DrawController();
+
+  static instance() { return this._instance; }
+
   constructor() {
+    this.drawings = [];
+
     this.setupCanvas();
     this.setupCtx();
+
+    EventManager.instance().subscribeTo([DRAW_WITH_PEN], this);
   }
 
   update() {
     const entities = GlobalStateManager.instance().getEntities();
 
     this.clearCanvas();
+    this.drawDrawings();
     this.drawEntities(entities);
+  }
+
+  listen(event) {
+    switch (event.type) {
+      case DRAW_WITH_PEN: {
+        this.handleDrawWithPen(event.xPos, event.yPos);
+      }
+
+      default: break;
+    }
   }
 
   setupCanvas() {
@@ -36,13 +58,19 @@ export class DrawController {
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
+  drawDrawings() {
+    for (const drawing of this.drawings) {
+      this.ctx.fillStyle = 'black';
+      this.ctx.fillRect(drawing.xPos, drawing.yPos, 3, 3);
+    }
+  }
+
   drawEntities(entities) {
     for (const entity of Object.values(entities)) {
-      const playerEntity = entity instanceof Player ? entity : new Player(entity);
-      playerEntity.sprite.update(playerEntity.direction);
+      entity.sprite.update(entity.direction, entity.state);
 
-      this.drawEntity(playerEntity);
-      this.drawUsername(playerEntity);
+      this.drawEntity(entity);
+      this.drawUsername(entity);
     }
   }
 
@@ -59,6 +87,10 @@ export class DrawController {
 
     const text = entity.name || entity.id;
     this.ctx.fillText(text, entity.xPos + 1 + (48 / 2), entity.yPos - 10);
+  }
+
+  handleDrawWithPen(xPos, yPos) {
+    this.drawings.push({ xPos, yPos });
   }
 
 }
