@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": ".\\node_modules\\.bin\\nodemon server\\index.js",
+    "server": "./node_modules/.bin/nodemon server/index.js",
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production",
@@ -15,7 +15,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/plugin-transform-react-jsx": "^7.13.12",
     "dotenv": "^8.2.0",
+    "preact": "^10.5.13",
     "uuid": "^8.3.2",
     "ws": "^7.4.4"
   },

@@ -31,5 +31,12 @@ module.exports = {
             // Learn more about loaders from https://webpack.js.org/loaders/
         ],
     },
+    // resolve: {
+    //     alias: {
+    //         'react': 'preact/compat',
+    //         'react-dom/test-utils': 'preact/test-utils',
+    //         'react-dom': 'preact/compat',
+    //     },
+    // },
     devtool: 'eval-source-map',
 };
