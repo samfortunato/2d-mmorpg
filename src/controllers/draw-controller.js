@@ -1,8 +1,6 @@
 import { GlobalStateManager } from '../managers/global-state-manager';
 import { EventManager } from '../managers/event-manager';
 
-import { Player } from '../entities/player';
-
 import { DRAW_WITH_PEN } from '../constants/action-types/pen';
 
 export class DrawController {
@@ -77,7 +75,7 @@ export class DrawController {
   drawEntity(entity) {
     const [sx, sy, sw, sh] = entity.sprite.currentCrop;
 
-    this.ctx.drawImage(entity.sprite.img, sx, sy, sw, sh, entity.xPos, entity.yPos, 48, 64);
+    this.ctx.drawImage(entity.sprite.img, sx, sy, sw, sh, entity.xPos, entity.yPos, 64, 64);
   }
 
   drawUsername(entity) {
@@ -86,7 +84,7 @@ export class DrawController {
     this.ctx.font = '11px sans-serif';
 
     const text = entity.name || entity.id;
-    this.ctx.fillText(text, entity.xPos + 1 + (48 / 2), entity.yPos - 10);
+    this.ctx.fillText(text, entity.xPos + 1 + (64 / 2), entity.yPos - 10);
   }
 
   handleDrawWithPen(xPos, yPos) {

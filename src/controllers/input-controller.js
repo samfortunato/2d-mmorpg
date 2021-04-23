@@ -19,7 +19,7 @@ export class InputController {
   fireKeydown(key) {
     // TODO: refactor to not a dumb way of doing this
     if (!AudioController.instance().hasPlayedForFirstTime) {
-      EventManager.instance().dispatch(toggleMusic('./audio/earthbound.mp3'));
+      // EventManager.instance().dispatch(toggleMusic('./audio/earthbound.mp3'));
 
       AudioController.instance().hasPlayedForFirstTime = true;
     }

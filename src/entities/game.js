@@ -8,6 +8,7 @@ import { DrawController } from '../controllers/draw-controller';
 import { ChatController } from '../controllers/chat-controller';
 import { AudioController } from '../controllers/audio-controller';
 import { PenController } from '../controllers/pen-controller';
+import { CommandController } from '../controllers/command-controller';
 
 export class Game {
 
@@ -20,6 +21,7 @@ export class Game {
       // PenController.instance(),
       DrawController.instance(),
       ChatController.instance(),
+      CommandController.instance(),
       AudioController.instance(),
       EventManager.instance(),
     ];
@@ -28,9 +30,13 @@ export class Game {
   }
 
   start(timestamp) {
+    this.handleAuth();
+
     GlobalStateManager.instance().setDeltaTime((timestamp - this.previousTime) / 1000);
 
-    this.handlers.forEach(handler => handler.update());
+    this.handlers.forEach(handler => {
+      if (handler.update) handler.update();
+    });
 
     const entities = GlobalStateManager.instance().getEntities();
     Object.values(entities).forEach(entity => {
@@ -40,6 +46,12 @@ export class Game {
     this.previousTime = timestamp;
 
     requestAnimationFrame(this.start.bind(this));
+  }
+
+  handleAuth() {
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+      location.replace(`${location.origin}/login.html`);
+    }
   }
 
 }

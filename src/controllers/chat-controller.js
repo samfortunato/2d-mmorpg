@@ -2,7 +2,7 @@ import { EventManager } from '../managers/event-manager';
 import { GlobalStateManager } from '../managers/global-state-manager';
 
 import { sendMessage } from '../actions/chat';
-import { changePlayerName, changePlayerSprite, toggleMusic } from '../actions/command';
+import { enterCommand } from '../actions/command';
 
 import { escapeHtml } from '../utils/escape-html';
 
@@ -51,23 +51,8 @@ export class ChatController {
     const chatText = escapeHtml(this.chatboxInput.value);
 
     if (chatText) {
-      if (/^\/nick/.test(chatText)) {
-        const playerName = chatText.split('/nick ')[1].slice(0, 20);
-
-        EventManager.instance().dispatch(changePlayerName(playerName));
-
-      } else if (/^\/yeb/.test(chatText)) {
-        EventManager.instance().dispatch(changePlayerSprite('./img/jeb.gif'));
-
-      } else if (/^\/mac/.test(chatText)) {
-        EventManager.instance().dispatch(changePlayerSprite('./img/boxdog.gif'));
-
-      } else if (/^\/resetsprite/.test(chatText)) {
-        EventManager.instance().dispatch(changePlayerSprite('./img/characters.gif'));
-
-      } else if (/^\/audio/.test(chatText)) {
-        EventManager.instance().dispatch(toggleMusic('./audio/earthbound.mp3'));
-
+      if (chatText.startsWith('/')) {
+        EventManager.instance().dispatch(enterCommand(chatText));
       } else {
         EventManager.instance().dispatch(sendMessage({
           type: 'chat',
@@ -120,9 +105,6 @@ export class ChatController {
 
   handleFireKeyPress(key) {
     if (key === 't' && document.activeElement !== this.chatboxInput) {
-      // TODO: might have to send whole InputEvent obj in event...
-      // evt.preventDefault();
-
       this.chatboxInput.focus();
       this.chatboxInput.value = '';
     }
