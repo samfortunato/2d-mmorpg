@@ -1,6 +1,7 @@
 import { EventManager } from '../managers/event-manager';
 
 import { TOGGLE_MUSIC } from '../constants/action-types/command';
+import { CHANGE_VOLUME } from '../constants/action-types/settings';
 
 export class AudioController {
 
@@ -16,7 +17,7 @@ export class AudioController {
     this.playing = false;
     this.hasPlayedForFirstTime = false;
 
-    EventManager.instance().subscribeTo([TOGGLE_MUSIC], this);
+    EventManager.instance().subscribeTo([TOGGLE_MUSIC, CHANGE_VOLUME], this);
   }
 
   update() { }
@@ -33,7 +34,16 @@ export class AudioController {
           this.audioPlayer.pause();
           this.playing = false;
         }
+
+        break;
       }
+
+      case CHANGE_VOLUME: {
+        this.audioPlayer.volume = event.volume;
+        break;
+      }
+
+      default: break;
     }
   }
 

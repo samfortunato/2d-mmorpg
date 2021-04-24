@@ -1,16 +1,17 @@
 import { h } from 'preact';
 
-import { dispatchGameEvent } from '../managers/event-manager';
-import { toggleMusic } from '../actions/command';
+import { useAppContext } from './contexts/app';
 
 export function Hud() {
-  function handleToggleMusic() {
-    dispatchGameEvent(toggleMusic('./audio/earthbound.mp3'));
+  const { setAppContext } = useAppContext();
+
+  function handleOpenSettings() {
+    setAppContext(prevAppContext => ({ ...prevAppContext, isSettingsOpen: true }));
   }
 
   return (
     <nav id="hud">
-      <button type="button" onClick={handleToggleMusic}>Toggle Music</button>
+      <button type="button" onClick={handleOpenSettings}>Settings</button>
     </nav>
   );
 }
