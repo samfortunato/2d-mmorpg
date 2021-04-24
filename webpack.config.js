@@ -15,7 +15,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(js|jsx)$/,
+                test: /\.jsx?$/,
                 loader: 'babel-loader',
             },
             {
@@ -31,12 +31,13 @@ module.exports = {
             // Learn more about loaders from https://webpack.js.org/loaders/
         ],
     },
-    // resolve: {
-    //     alias: {
-    //         'react': 'preact/compat',
-    //         'react-dom/test-utils': 'preact/test-utils',
-    //         'react-dom': 'preact/compat',
-    //     },
-    // },
+    resolve: {
+        alias: {
+            'react': 'preact/compat',
+            'react-dom/test-utils': 'preact/test-utils',
+            'react-dom': 'preact/compat',
+        },
+        extensions: ['.js', '.jsx'],
+    },
     devtool: 'eval-source-map',
 };

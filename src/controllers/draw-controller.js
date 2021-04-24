@@ -3,11 +3,14 @@ import { EventManager } from '../managers/event-manager';
 
 import { DRAW_WITH_PEN } from '../constants/action-types/pen';
 
+const BackgroundImage = new Image();
+BackgroundImage.src = './img/bg.gif';
+
 export class DrawController {
 
-  static _instance = new DrawController();
+  // static _instance = new DrawController();
 
-  static instance() { return this._instance; }
+  // static instance() { return this._instance; }
 
   constructor() {
     this.drawings = [];
@@ -37,11 +40,9 @@ export class DrawController {
   }
 
   setupCanvas() {
-    this.canvas = document.createElement('canvas');
+    this.canvas = document.querySelector('canvas');
     this.canvas.width = 800;
-    this.canvas.height = 800;
-
-    document.querySelector('main').prepend(this.canvas);
+    this.canvas.height = 700;
   }
 
   setupCtx() {
@@ -52,8 +53,7 @@ export class DrawController {
 
   clearCanvas() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.fillStyle = 'grey';
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.drawImage(BackgroundImage, 0, 0);
   }
 
   drawDrawings() {

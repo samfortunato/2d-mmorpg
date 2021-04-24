@@ -12,9 +12,9 @@ import { EMOTE_IMAGE_URLS, EMOTE_MATCHER } from '../constants/chat';
 
 export class ChatController {
 
-  static _instance = new ChatController();
+  // static _instance = new ChatController();
 
-  static instance() { return this._instance; }
+  // static instance() { return this._instance; }
 
   constructor() {
     this.chatbox = document.querySelector('#chatbox');

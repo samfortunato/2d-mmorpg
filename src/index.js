@@ -1,9 +1,5 @@
-// import { h, render } from 'preact';
+import { h, render } from 'preact';
 
-import { Game } from './entities/game';
+import { App } from './ui/app';
 
-// import { Test } from './ui/test';
-
-new Game().start();
-
-// render(<Test />, document.querySelector('#test'));
+render(<App />, document.querySelector('#game'));

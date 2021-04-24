@@ -40,3 +40,5 @@ export class EventManager {
   }
 
 }
+
+export const dispatchGameEvent = EventManager.instance().dispatch.bind(EventManager.instance());

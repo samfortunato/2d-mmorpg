@@ -11,6 +11,10 @@ main {
   margin: 0 auto;
 }
 
+/* #hud {
+  position: absolute;
+} */
+
 #chatbox {
   width: 800px;
   height: 100px;
