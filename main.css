@@ -7,13 +7,14 @@ body {
 }
 
 main {
-  width: 850px;
+  width: 800px;
   margin: 0 auto;
 }
 
-/* #hud {
-  position: absolute;
-} */
+#hud {
+  display: flex;
+  justify-content: flex-end;
+}
 
 #chatbox {
   width: 800px;
@@ -39,6 +40,10 @@ ul {
 
 .chat-text {
   margin: 0.2rem 0;
+}
+
+.chat-info {
+  color: #71c3c3;
 }
 
 .emote {
@@ -71,4 +76,12 @@ ul {
 #settings li {
   display: flex;
   justify-content: space-between;
+}
+
+#sign-up-link {
+  margin-top: 1.7rem;
+}
+
+#sign-up-link a {
+  color: white;
 }

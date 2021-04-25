@@ -22,7 +22,7 @@ export class Player {
     this.state = params.state || STATES.IDLE;
 
     this.sprite = new Sprite();
-    this.sprite.img.src = params.spriteUrl || './img/player.gif';
+    this.sprite.img.src = params.spriteUrl || localStorage.getItem('playerSpriteUrl') || './img/player.gif';
 
     EventManager.instance().subscribeTo([CHANGE_PLAYER_SPRITE], this);
   }
@@ -103,6 +103,8 @@ export class Player {
 
   handleSpriteChange(playerSpriteUrl) {
     this.sprite.img.src = playerSpriteUrl;
+
+    localStorage.setItem('playerSpriteUrl', playerSpriteUrl);
   }
 
   updateParams(params) {
@@ -116,7 +118,7 @@ export class Player {
     this.state = params.state || STATES.IDLE;
 
     this.sprite = new Sprite();
-    this.sprite.img.src = params.spriteUrl || './img/characters.gif';
+    this.sprite.img.src = params.spriteUrl || localStorage.getItem('playerSpriteUrl') || './img/characters.gif';
     this.sprite.currentFrame = params.currentFrame || 0;
   }
 

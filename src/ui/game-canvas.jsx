@@ -1,7 +1,7 @@
 import { h } from 'preact';
+import { useLayoutEffect } from 'preact/hooks';
 
 import { Game } from '../entities/game';
-import { useLayoutEffect } from 'preact/hooks';
 
 let game;
 

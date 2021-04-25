@@ -30,8 +30,6 @@ export class Game {
   }
 
   start(timestamp) {
-    this.handleAuth();
-
     GlobalStateManager.instance().setDeltaTime((timestamp - this.previousTime) / 1000);
 
     this.handlers.forEach(handler => {
@@ -46,12 +44,6 @@ export class Game {
     this.previousTime = timestamp;
 
     requestAnimationFrame(this.start.bind(this));
-  }
-
-  handleAuth() {
-    if (localStorage.getItem('isLoggedIn') !== 'true') {
-      location.replace(`${location.origin}/login.html`);
-    }
   }
 
 }

@@ -4,7 +4,9 @@ export function Chat() {
   return (
     <>
       <section id="chatbox">
-        <ul></ul>
+        <ul>
+          <li className="chat-text chat-info">INFO: HELLO! There's currently a strange bug where you move super fast on login. Just refresh the page.</li>
+        </ul>
       </section>
 
       <form id="chatbox-field">
