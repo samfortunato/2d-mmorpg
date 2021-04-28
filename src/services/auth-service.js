@@ -1,5 +1,4 @@
 import { Auth } from '@aws-amplify/auth';
-import { CognitoUser } from 'amazon-cognito-identity-js';
 
 Auth.configure({
   userPoolId: 'us-east-1_sPEpHeKJW',

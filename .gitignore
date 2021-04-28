@@ -5,4 +5,5 @@ dist/
 bundle.js
 *.pem
 *.ppk
+*.csv
 *.mp3

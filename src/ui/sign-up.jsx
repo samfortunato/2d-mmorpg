@@ -1,8 +1,12 @@
 import { h, Fragment } from 'preact';
 import { useState } from 'preact/hooks';
 import { useHistory } from 'react-router';
+import { loadStripe } from '@stripe/stripe-js';
 
 import { AuthService } from '../services/auth-service';
+import { HttpService } from '../services/http-service';
+
+const stripePromise = loadStripe('pk_test_a8mVaKnxIvxYfMnGkHoFyvTf');
 
 export function SignUp() {
   const history = useHistory();
@@ -19,7 +23,13 @@ export function SignUp() {
     try {
       await AuthService.signUp(username, email, password);
 
-      history.push('/auth/log-in');
+      const stripe = await stripePromise;
+      const session = await HttpService.jsonRequest('http://ec2-100-25-200-25.compute-1.amazonaws.com:8082/create-checkout-session', { method: 'POST' });
+
+      const result = await stripe.redirectToCheckout({ sessionId: session.id });
+      if (result.error) console.error(result.error.message);
+
+      // history.push('/auth/log-in');
     } catch (err) {
       console.error(err);
     } finally {
@@ -67,9 +77,13 @@ export function SignUp() {
         {isSigningUp && <span>Loading...</span>}
 
         <p>
-          Once you sign up, check your email for a confirmation link.
-          <strong>Confirm your email before logging in</strong>, fingus.
+          Once you sign up, you will be directed to the <strong>payment form.</strong>
         </p>
+        <p>
+          Payment is handled by <a href="https://stripe.com/">Stripe</a>, a secure payment processor. We
+           do not store ANY of your financial information.
+        </p>
+        <p>Payment will only be processed if you enter in your shit in the next screen.</p>
       </form>
     </>
   );

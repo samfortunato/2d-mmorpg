@@ -18,10 +18,12 @@
   "dependencies": {
     "@aws-amplify/auth": "^3.4.30",
     "@babel/plugin-transform-react-jsx": "^7.13.12",
+    "@stripe/stripe-js": "^1.13.2",
     "amazon-cognito-identity-js": "^4.6.0",
     "dotenv": "^8.2.0",
     "preact": "^10.5.13",
     "react-router-dom": "^5.2.0",
+    "stripe": "^8.145.0",
     "uuid": "^8.3.2",
     "ws": "^7.4.4"
   },

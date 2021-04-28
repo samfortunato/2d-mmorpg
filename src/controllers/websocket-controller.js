@@ -9,8 +9,8 @@ import { SEND_MESSAGE } from '../constants/action-types/chat';
 export class WebsocketController {
 
   constructor() {
-    this.webSocket = new WebSocket('ws://3.90.50.129:8081'); // prod lol
-    // this.webSocket = new WebSocket('ws://localhost:8081'); // local
+    // this.webSocket = new WebSocket('ws://3.90.50.129:8081'); // prod lol
+    this.webSocket = new WebSocket('ws://localhost:8081'); // local
 
     this.webSocket.addEventListener('message', this.handleMessage.bind(this));
 
