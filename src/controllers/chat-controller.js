@@ -1,7 +1,7 @@
-import { EventManager } from '../managers/event-manager';
+import { dispatchGameEvent, EventManager } from '../managers/event-manager';
 import { GlobalStateManager } from '../managers/global-state-manager';
 
-import { sendMessage } from '../actions/chat';
+import { sendEmote, sendMessage } from '../actions/chat';
 import { enterCommand } from '../actions/command';
 
 import { escapeHtml } from '../utils/escape-html';
@@ -73,8 +73,9 @@ export class ChatController {
     }
   }
 
-  parseEmotes(chatText) {
+  parseEmotes(chatText, senderId) {
     let parsedText = chatText;
+    let urlOfFirstEmoteUsed;
 
     const usedEmotes = new Set(chatText.match(EMOTE_MATCHER));
 
@@ -86,18 +87,22 @@ export class ChatController {
         const emoteHtml = `<img class="emote" src="${emoteUrl}" />`;
         parsedText = parsedText.replaceAll(emote, emoteHtml);
       }
+
+      urlOfFirstEmoteUsed = emoteUrl;
     }
+
+    if (urlOfFirstEmoteUsed) dispatchGameEvent(sendEmote(urlOfFirstEmoteUsed, senderId));
 
     return parsedText;
   }
 
-  appendNewChatMessage(message) {
-    let processedText = escapeHtml(message.text);
-    processedText = this.parseEmotes(processedText);
+  appendNewChatMessage(messageData) {
+    let processedText = escapeHtml(messageData.text);
+    processedText = this.parseEmotes(processedText, messageData.id);
 
     const chatMessage = document.createElement('li');
     chatMessage.className = 'chat-text';
-    chatMessage.innerHTML = `${message.name}: ${processedText}`;
+    chatMessage.innerHTML = `${messageData.name}: ${processedText}`;
 
     this.chatboxList.appendChild(chatMessage);
     this.chatbox.scrollTop = this.chatbox.scrollHeight;

@@ -11,7 +11,8 @@ class WebsocketController {
     this.webSocketServer.on('connection', this.processConnection.bind(this));
   }
 
-  processConnection(webSocket) {
+  /** @param {WebSocket} webSocket */
+  processConnection(webSocket, request, client) {
     webSocket.on('message', this.processMessage.bind(this));
   }
 

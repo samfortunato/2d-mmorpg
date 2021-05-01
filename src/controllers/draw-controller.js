@@ -2,6 +2,7 @@ import { GlobalStateManager } from '../managers/global-state-manager';
 import { EventManager } from '../managers/event-manager';
 
 import { DRAW_WITH_PEN } from '../constants/action-types/pen';
+import { SEND_EMOTE } from '../constants/action-types/chat';
 
 const BackgroundImage = new Image();
 BackgroundImage.src = './img/bg.gif';
@@ -14,11 +15,14 @@ export class DrawController {
 
   constructor() {
     this.drawings = [];
+    this.latestEmote = new Image();
+    this.latestEmoteSenderId = '';
+    this.emoteCooldown = 0;
 
     this.setupCanvas();
     this.setupCtx();
 
-    EventManager.instance().subscribeTo([DRAW_WITH_PEN], this);
+    EventManager.instance().subscribeTo([DRAW_WITH_PEN, SEND_EMOTE], this);
   }
 
   update() {
@@ -27,12 +31,19 @@ export class DrawController {
     this.clearCanvas();
     this.drawDrawings();
     this.drawEntities(entities);
+    this.drawEmote();
   }
 
   listen(event) {
     switch (event.type) {
       case DRAW_WITH_PEN: {
         this.handleDrawWithPen(event.xPos, event.yPos);
+        break;
+      }
+
+      case SEND_EMOTE: {
+        this.handleSendEmote(event.emoteUrl, event.senderId);
+        break;
       }
 
       default: break;
@@ -78,6 +89,28 @@ export class DrawController {
     this.ctx.drawImage(entity.sprite.img, sx, sy, sw, sh, entity.xPos, entity.yPos, 64, 64);
   }
 
+  drawEmote() {
+    if (this.emoteCooldown > 0) {
+      const sender = GlobalStateManager.instance().getEntities()[this.latestEmoteSenderId] || GlobalStateManager.instance().getPlayerPos();
+      const { xPos: senderXPos, yPos: senderYPos } = sender;
+
+      const emoteWidth = this.latestEmote.width * 0.25;
+      const emoteHeight = this.latestEmote.height * 0.25;
+      const emoteImgOffset = (emoteWidth - 64) / 2;
+      const emoteXPos = senderXPos - emoteImgOffset;
+      const emoteYPos = senderYPos - 64;
+
+      this.ctx.fillStyle = 'white';
+      this.ctx.fillRect(emoteXPos - 5, emoteYPos - 5, emoteWidth + 10, emoteHeight + 10);
+
+      this.ctx.imageSmoothingEnabled = true;
+      this.ctx.drawImage(this.latestEmote, emoteXPos, emoteYPos, emoteWidth, emoteHeight);
+      this.ctx.imageSmoothingEnabled = false;
+
+      this.emoteCooldown--;
+    }
+  }
+
   drawUsername(entity) {
     this.ctx.fillStyle = 'black';
     this.ctx.textAlign = 'center';
@@ -89,6 +122,13 @@ export class DrawController {
 
   handleDrawWithPen(xPos, yPos) {
     this.drawings.push({ xPos, yPos });
+  }
+
+  handleSendEmote(emoteUrl, senderId) {
+    this.emoteCooldown = 90;
+
+    this.latestEmote.src = emoteUrl;
+    this.latestEmoteSenderId = senderId;
   }
 
 }

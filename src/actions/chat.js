@@ -1,4 +1,4 @@
-import { RECEIVED_CHAT_MESSAGE, SEND_MESSAGE } from '../constants/action-types/chat';
+import { RECEIVED_CHAT_MESSAGE, SEND_EMOTE, SEND_MESSAGE } from '../constants/action-types/chat';
 
 export function receivedChatMessage(messageData) {
   return {
@@ -13,3 +13,11 @@ export function sendMessage(messageData) {
     messageData,
   };
 };
+
+export function sendEmote(emoteUrl, senderId) {
+  return {
+    type: SEND_EMOTE,
+    emoteUrl,
+    senderId,
+  };
+}

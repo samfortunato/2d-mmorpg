@@ -1,2 +1,3 @@
 export const RECEIVED_CHAT_MESSAGE = 'RECEIVED_CHAT_MESSAGE';
 export const SEND_MESSAGE = 'SEND_MESSAGE';
+export const SEND_EMOTE = 'SEND_EMOTE';

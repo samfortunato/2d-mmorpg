@@ -101,7 +101,14 @@ export class GlobalStateManager {
     return {
       id: this.state.player.id,
       name: this.state.player.name,
-    }
+    };
+  }
+
+  getPlayerPos() {
+    return {
+      xPos: this.state.player.xPos,
+      yPos: this.state.player.yPos,
+    };
   }
 
   getPressedKeys() {
