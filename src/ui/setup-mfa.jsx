@@ -26,7 +26,7 @@ export function SetupMfa() {
       const currentUser = await AuthService.getCurrentUser();
       const username = currentUser.getUsername();
       const code = await AuthService.getMfaAuthorizationCode();
-      const qrCodeValue = `otpauth://totp/AWSCognito:${username}?secret=${code}`;
+      const qrCodeValue = `otpauth://totp/Untitled 2D MMORPG - ${username}?secret=${code}`;
 
       setQrCodeVaue(qrCodeValue);
     }
