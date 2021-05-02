@@ -15,7 +15,7 @@ export class PaymentService {
       const session = await HttpService.jsonRequest(url, opts);
       const result = await stripe.redirectToCheckout({ sessionId: session.id });
 
-      if (result.error) console.error(result.error.message);
+      if (result.error) throw result.error.message;
     } catch (err) {
       console.error(err);
     }

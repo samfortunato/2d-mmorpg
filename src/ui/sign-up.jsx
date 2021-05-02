@@ -1,12 +1,9 @@
 import { h, Fragment } from 'preact';
 import { useState } from 'preact/hooks';
 import { useHistory } from 'react-router';
-import { loadStripe } from '@stripe/stripe-js';
 
 import { AuthService } from '../services/auth-service';
-import { HttpService } from '../services/http-service';
-
-const stripePromise = loadStripe('pk_test_a8mVaKnxIvxYfMnGkHoFyvTf');
+import { PaymentService } from '../services/payment-service';
 
 export function SignUp() {
   const history = useHistory();
@@ -24,14 +21,7 @@ export function SignUp() {
       try {
         await AuthService.signUp(username, email, password);
 
-        const stripe = await stripePromise;
-        const session = await HttpService.jsonRequest('http://ec2-100-25-200-25.compute-1.amazonaws.com:8082/create-checkout-session', { method: 'POST' });
-
-        const result = await stripe.redirectToCheckout({ sessionId: session.id });
-
-        if (result.error) throw result.error;
-
-        // history.push('/auth/log-in');
+        await PaymentService.handlePayment();
       } catch (err) {
         console.error(err);
       } finally {
@@ -41,18 +31,16 @@ export function SignUp() {
   }
 
   function canSignUp() {
-    return hasTenCharsOrMore() &&
+    return hasEightCharsOrMore() &&
       hasOneOrMoreLowercaseLetters() &&
       hasOneOrMoreUppercaseLetters() &&
-      hasOneOrMoreNumbers() &&
-      hasOneOrMoreSpecialCharacters();
+      hasOneOrMoreNumbers();
   }
 
-  function hasTenCharsOrMore() { return password.length >= 10; }
+  function hasEightCharsOrMore() { return password.length >= 8; }
   function hasOneOrMoreLowercaseLetters() { return /[a-z]/.test(password); }
   function hasOneOrMoreUppercaseLetters() { return /[A-Z]/.test(password); }
   function hasOneOrMoreNumbers() { return /\d/.test(password); }
-  function hasOneOrMoreSpecialCharacters() { return /\W/.test(password); }
 
   return (
     <>
@@ -94,15 +82,15 @@ export function SignUp() {
         {isSigningUp && <span>Loading...</span>}
 
         <ul id="password-requirements">
-          <li data-is-valid={hasTenCharsOrMore()}>Password must be 10 characters or more</li>
+          <li data-is-valid={hasEightCharsOrMore()}>Password must be 8 characters or more</li>
           <li data-is-valid={hasOneOrMoreLowercaseLetters()}>Password must have at least 1 lowercase letter</li>
           <li data-is-valid={hasOneOrMoreUppercaseLetters()}>Password must have at least 1 uppercase letter</li>
           <li data-is-valid={hasOneOrMoreNumbers()}>Password must have at least 1 number</li>
-          <li data-is-valid={hasOneOrMoreSpecialCharacters()}>Password must have at least 1 special character (!, @, #, etc.)</li>
         </ul>
 
+        <p>You <strong>must</strong>confirm your email after signing up.</p>
         <p>
-          Once you sign up, you will be directed to the <strong>payment form.</strong>
+          After sign up, you will be directed to the <strong>payment form.</strong>
         </p>
         <p>
           Payment is handled by <a href="https://stripe.com/">Stripe</a>, a secure payment processor. We

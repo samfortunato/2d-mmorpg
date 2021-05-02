@@ -25,7 +25,11 @@ export function LogIn() {
     try {
       await AuthService.signIn(username, password);
 
-      history.push('/');
+      const isMfaEnabled = await AuthService.getIsMfaPreferred();
+
+      isMfaEnabled ?
+        history.push('/auth/enter-mfa-code') :
+        history.push('/');
     } catch (err) {
       console.error(err);
     } finally {

@@ -1,5 +1,6 @@
 import { h } from 'preact';
 import { useState } from 'preact/hooks';
+import { useHistory } from 'react-router';
 
 import { useAppContext } from './contexts/app';
 
@@ -8,6 +9,7 @@ import { toggleMusic } from '../actions/command';
 import { changeVolume } from '../actions/settings';
 
 export function Settings() {
+  const history = useHistory();
   const [volume, setVolume] = useState(1);
   const { appContext, setAppContext } = useAppContext();
 
@@ -20,6 +22,10 @@ export function Settings() {
 
     setVolume(newVolume);
     dispatchGameEvent(changeVolume(newVolume));
+  }
+
+  function handleSetUpMfa() {
+    history.push('/auth/setup-mfa');
   }
 
   function handleCloseSettings() {
@@ -42,6 +48,11 @@ export function Settings() {
           <li>
             Volume
             <input type="range" value={volume} min="0" max="1" step="0.01" onInput={handleVolumeChange} />
+          </li>
+
+          <li>
+            Set Up MFA
+            <button type="button" onClick={handleSetUpMfa}>Setup</button>
           </li>
         </ul>
 
