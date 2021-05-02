@@ -23,15 +23,9 @@ export class AuthService {
   }
 
   static async signIn(username, password) {
-    try {
-      const currentUser = await Auth.signIn(username, password);
+    await Auth.signIn(username, password);
 
-      localStorage.setItem('isLoggedIn', 'true');
-
-      console.log({ currentUser });
-    } catch (err) {
-      console.error(err);
-    }
+    localStorage.setItem('isLoggedIn', 'true');
   }
 
   static async signOut() {
@@ -63,9 +57,9 @@ export class AuthService {
     return info.attributes.email_verified;
   }
 
-  static async resendVerificationEmail() {
+  static async resendVerificationEmail(user) {
     const currentUser = await this.getCurrentUser();
-    const username = currentUser.getUsername();
+    const username = user || currentUser?.getUsername();
 
     await Auth.resendSignUp(username);
   }

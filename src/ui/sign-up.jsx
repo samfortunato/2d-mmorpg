@@ -88,14 +88,15 @@ export function SignUp() {
           <li data-is-valid={hasOneOrMoreNumbers()}>Password must have at least 1 number</li>
         </ul>
 
-        <p>You <strong>must</strong>confirm your email after signing up.</p>
-        <p>
-          After sign up, you will be directed to the <strong>payment form.</strong>
-        </p>
+        <p>You <strong>must</strong> confirm your email after signing up.</p>
+
+        <p>After sign up, you will be directed to the <b>payment form.</b></p>
+
         <p>
           Payment is handled by <a href="https://stripe.com/">Stripe</a>, a secure payment processor. We
            do not store ANY of your financial information.
         </p>
+
         <p>Payment will only be processed if you enter in your shit in the next screen.</p>
       </form>
     </>
