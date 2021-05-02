@@ -78,6 +78,18 @@ ul {
   justify-content: space-between;
 }
 
+#password-requirements {
+  list-style: circle;
+}
+
+#password-requirements li {
+  color: red;
+}
+
+#password-requirements li[data-is-valid="true"] {
+  color: green;
+}
+
 #sign-up-link {
   margin-top: 1.7rem;
 }
