@@ -9,7 +9,7 @@ export class PaymentService {
   static async handlePayment() {
     try {
       const stripe = await stripePromise;
-      const url = 'http://ec2-100-25-200-25.compute-1.amazonaws.com:8082/create-checkout-session';
+      const url = 'http://lb-2d-mmorpg-payments-355078289.us-east-1.elb.amazonaws.com/create-checkout-session';
       const opts = { method: 'POST' }
 
       const session = await HttpService.jsonRequest(url, opts);
