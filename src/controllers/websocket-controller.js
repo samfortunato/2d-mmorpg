@@ -9,10 +9,16 @@ import { SEND_MESSAGE } from '../constants/action-types/chat';
 export class WebsocketController {
 
   constructor() {
-    this.webSocket = new WebSocket('ws://3.90.50.129:8081'); // prod lol
-    // this.webSocket = new WebSocket('ws://localhost:8081'); // local
+    try {
+      // try accessing the ec2 server URL with wws
+      this.webSocket = new WebSocket('wss://server.superatomic.net'); // prod lol
+      // this.webSocket = new WebSocket('ws://localhost:8081'); // local
 
-    this.webSocket.addEventListener('message', this.handleMessage.bind(this));
+      this.webSocket.addEventListener('message', this.handleMessage.bind(this));
+      this.webSocket.addEventListener('error', this.handleError.bind(this));
+    } catch (err) {
+      this.handleError(err);
+    }
 
     EventManager.instance().subscribeTo([PLAYER_MOVE, SEND_MESSAGE], this);
   }
@@ -57,6 +63,10 @@ export class WebsocketController {
 
   sendMessage(message) {
     this.webSocket.send(JSON.stringify(message));
+  }
+
+  handleError(err) {
+    console.error(err);
   }
 
 }

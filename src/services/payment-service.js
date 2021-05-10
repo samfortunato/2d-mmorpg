@@ -2,14 +2,14 @@ import { loadStripe } from '@stripe/stripe-js';
 
 import { HttpService } from './http-service';
 
-const stripePromise = loadStripe('pk_test_a8mVaKnxIvxYfMnGkHoFyvTf');
+const stripePromise = loadStripe('pk_live_t13oysBWiwRYn7mFxTWa0sqh');
 
 export class PaymentService {
 
   static async handlePayment() {
     try {
       const stripe = await stripePromise;
-      const url = 'http://lb-2d-mmorpg-payments-355078289.us-east-1.elb.amazonaws.com/create-checkout-session';
+      const url = 'https://payments.superatomic.net/create-checkout-session';
       const opts = { method: 'POST' }
 
       const session = await HttpService.jsonRequest(url, opts);
