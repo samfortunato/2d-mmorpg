@@ -29,7 +29,7 @@ export class PenController {
     evt.preventDefault();
 
     if (this.isDrawing) {
-      EventManager.instance().dispatch(drawWithPen(evt.clientX, evt.clientY));
+      EventManager.dispatch(drawWithPen(evt.clientX, evt.clientY));
     }
   }
 

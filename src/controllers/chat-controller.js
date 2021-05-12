@@ -24,10 +24,8 @@ export class ChatController {
 
     this.chatboxField.addEventListener('submit', this.processMessage.bind(this));
 
-    EventManager.instance().subscribeTo([FIRE_KEY_PRESS, RECEIVED_CHAT_MESSAGE], this);
+    EventManager.subscribeTo([FIRE_KEY_PRESS, RECEIVED_CHAT_MESSAGE], this);
   }
-
-  update() { }
 
   listen(event) {
     switch (event.type) {
@@ -52,9 +50,9 @@ export class ChatController {
 
     if (chatText) {
       if (chatText.startsWith('/')) {
-        EventManager.instance().dispatch(enterCommand(chatText));
+        EventManager.dispatch(enterCommand(chatText));
       } else {
-        EventManager.instance().dispatch(sendMessage({
+        EventManager.dispatch(sendMessage({
           type: 'chat',
           text: chatText,
           timeStamp: evt.timeStamp,

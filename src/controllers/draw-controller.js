@@ -1,6 +1,8 @@
 import { GlobalStateManager } from '../managers/global-state-manager';
 import { EventManager } from '../managers/event-manager';
 
+import { Entity } from '../entities/entity';
+
 import { DRAW_WITH_PEN } from '../constants/action-types/pen';
 import { SEND_EMOTE } from '../constants/action-types/chat';
 
@@ -8,10 +10,6 @@ const BackgroundImage = new Image();
 BackgroundImage.src = './img/bg.gif';
 
 export class DrawController {
-
-  // static _instance = new DrawController();
-
-  // static instance() { return this._instance; }
 
   constructor() {
     this.drawings = [];
@@ -22,7 +20,7 @@ export class DrawController {
     this.setupCanvas();
     this.setupCtx();
 
-    EventManager.instance().subscribeTo([DRAW_WITH_PEN, SEND_EMOTE], this);
+    EventManager.subscribeTo([DRAW_WITH_PEN, SEND_EMOTE], this);
   }
 
   update() {
@@ -62,9 +60,18 @@ export class DrawController {
     this.ctx.imageSmoothingEnabled = false;
   }
 
+  prepareToDraw() {
+    this.clearCanvas();
+  }
+
   clearCanvas() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.drawImage(BackgroundImage, 0, 0);
+  }
+
+  /** @param {Entity} entity */
+  draw(entity) {
+    entity.draw(this.ctx, this.canvas);
   }
 
   drawDrawings() {

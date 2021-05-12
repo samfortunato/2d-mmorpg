@@ -25,14 +25,12 @@ export class GlobalStateManager {
   }
 
   constructor() {
-    EventManager.instance().subscribeTo([
+    EventManager.subscribeTo([
       PRESSED_KEYS_UPDATE,
       CHANGE_PLAYER_NAME,
       UPDATE_ENTITIES,
     ], this);
   }
-
-  update() { }
 
   listen(event) {
     switch (event.type) {

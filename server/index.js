@@ -8,19 +8,28 @@ const { Player } = require('./player');
 class WebsocketController {
 
   constructor() {
-    this.httpsServer = https.createServer({
-      cert: fs.readFileSync('/etc/letsencrypt/live/server.superatomic.net/fullchain.pem'),
-      key: fs.readFileSync('/etc/letsencrypt/live/server.superatomic.net/privkey.pem'),
-      ca: fs.readFileSync('/etc/letsencrypt/live/server.superatomic.net/chain.pem'),
-    }, this.handleRequest.bind(this));
+    // // prod
+    // this.httpsServer = https.createServer({
+    //   cert: fs.readFileSync('/etc/letsencrypt/live/server.superatomic.net/fullchain.pem'),
+    //   key: fs.readFileSync('/etc/letsencrypt/live/server.superatomic.net/privkey.pem'),
+    //   ca: fs.readFileSync('/etc/letsencrypt/live/server.superatomic.net/chain.pem'),
+    // }, this.handleRequest.bind(this));
 
-    this.webSocketServer = new WebSocket.Server({ server: this.httpsServer });
+    // this.webSocketServer = new WebSocket.Server({ server: this.httpsServer });
+    // this.webSocketServer.on('connection', this.processConnection.bind(this));
+    // this.webSocketServer.on('error', this.logError.bind(this));
+
+    // this.players = {};
+
+    // this.httpsServer.listen(8081);
+
+
+    // local
+    this.webSocketServer = new WebSocket.Server({ port: 8081 });
     this.webSocketServer.on('connection', this.processConnection.bind(this));
     this.webSocketServer.on('error', this.logError.bind(this));
 
     this.players = {};
-
-    this.httpsServer.listen(8081);
   }
 
   /**

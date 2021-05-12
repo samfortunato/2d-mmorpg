@@ -13,12 +13,12 @@ export class EventManager {
    * @param {Array} eventTypes
    * @param {*} object
    */
-  subscribeTo(eventTypes, object) {
-    for (const eventType of eventTypes) {
-      if (!this.listeners.get(eventType)) this.listeners.set(eventType, []);
+  static subscribeTo(eventTypes, object) {
+    this.instance().subscribeTo(eventTypes, object);
+  }
 
-      this.listeners.set(eventType, [...this.listeners.get(eventType), object]);
-    }
+  static dispatch(event) {
+    this.instance().dispatch(event);
   }
 
   update() {
@@ -35,10 +35,18 @@ export class EventManager {
     this.events = [];
   }
 
+  subscribeTo(eventTypes, object) {
+    for (const eventType of eventTypes) {
+      if (!this.listeners.get(eventType)) this.listeners.set(eventType, []);
+
+      this.listeners.set(eventType, [...this.listeners.get(eventType), object]);
+    }
+  }
+
   dispatch(event) {
     this.events.push(event);
   }
 
 }
 
-export const dispatchGameEvent = EventManager.instance().dispatch.bind(EventManager.instance());
+export const dispatchGameEvent = EventManager.dispatch.bind(EventManager.instance());

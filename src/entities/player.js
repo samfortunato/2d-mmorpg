@@ -24,7 +24,7 @@ export class Player {
     this.sprite = new Sprite();
     this.sprite.img.src = params.spriteUrl || localStorage.getItem('playerSpriteUrl') || './img/player.gif';
 
-    EventManager.instance().subscribeTo([CHANGE_PLAYER_SPRITE], this);
+    EventManager.subscribeTo([CHANGE_PLAYER_SPRITE], this);
   }
 
   listen(event) {
@@ -42,8 +42,8 @@ export class Player {
   update() {
     if (this.id !== GlobalStateManager.instance().getPlayerId()) return;
 
-    const deltaTime = GlobalStateManager.instance().getDeltaTime();
     const pressedKeys = GlobalStateManager.instance().getPressedKeys();
+    const deltaTime = GlobalStateManager.instance().getDeltaTime();
 
     if (document.activeElement !== document.querySelector('#chatbox-input')) {
       if (pressedKeys['ArrowUp'] || pressedKeys['w']) {
@@ -77,7 +77,7 @@ export class Player {
 
     // this.sprite.update(this.direction, this.state);
 
-    EventManager.instance().dispatch(playerMove({
+    EventManager.dispatch(playerMove({
       id: this.id,
       name: this.name,
       xPos: this.xPos,

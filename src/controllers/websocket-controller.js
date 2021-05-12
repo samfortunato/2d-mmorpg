@@ -11,8 +11,8 @@ export class WebsocketController {
   constructor() {
     try {
       // try accessing the ec2 server URL with wws
-      this.webSocket = new WebSocket('wss://server.superatomic.net'); // prod lol
-      // this.webSocket = new WebSocket('ws://localhost:8081'); // local
+      // this.webSocket = new WebSocket('wss://server.superatomic.net'); // prod lol
+      this.webSocket = new WebSocket('ws://localhost:8081'); // local
 
       this.webSocket.addEventListener('message', this.handleMessage.bind(this));
       this.webSocket.addEventListener('error', this.handleError.bind(this));
@@ -20,10 +20,8 @@ export class WebsocketController {
       this.handleError(err);
     }
 
-    EventManager.instance().subscribeTo([PLAYER_MOVE, SEND_MESSAGE], this);
+    EventManager.subscribeTo([PLAYER_MOVE, SEND_MESSAGE], this);
   }
-
-  update() { }
 
   listen(event) {
     if (this.webSocket.readyState === this.webSocket.OPEN) {
@@ -48,12 +46,12 @@ export class WebsocketController {
 
     switch (message.type) {
       case 'chat': {
-        EventManager.instance().dispatch(receivedChatMessage(message));
+        EventManager.dispatch(receivedChatMessage(message));
         break;
       }
 
       case 'player_data': {
-        EventManager.instance().dispatch(updateEntities(message.players));
+        EventManager.dispatch(updateEntities(message.players));
         break;
       }
 

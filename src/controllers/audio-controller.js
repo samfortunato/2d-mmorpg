@@ -17,10 +17,8 @@ export class AudioController {
     this.playing = false;
     this.hasPlayedForFirstTime = false;
 
-    EventManager.instance().subscribeTo([TOGGLE_MUSIC, CHANGE_VOLUME], this);
+    EventManager.subscribeTo([TOGGLE_MUSIC, CHANGE_VOLUME], this);
   }
-
-  update() { }
 
   listen(event) {
     switch (event.type) {

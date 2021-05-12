@@ -1,11 +1,15 @@
-import { EventManager } from '../managers/event-manager';
-import { AudioController } from './audio-controller';
+import { EventManager } from './event-manager';
+import { AudioController } from '../controllers/audio-controller';
 
 import { pressedKeysUpdate, fireKeyPress } from '../actions/input';
 
 import { toggleMusic } from '../actions/command';
 
-export class InputController {
+export class InputManager {
+
+  static _instance = new InputManager();
+
+  static instance() { return this._instance; }
 
   constructor() {
     this.pressedKeys = {};
@@ -14,26 +18,24 @@ export class InputController {
     document.addEventListener('keyup', evt => this.fireKeyUp(evt.key));
   }
 
-  update() { }
-
   fireKeydown(key) {
     // TODO: refactor to not a dumb way of doing this
     if (!AudioController.instance().hasPlayedForFirstTime) {
-      // EventManager.instance().dispatch(toggleMusic('./audio/earthbound.mp3'));
+      // EventManager.dispatch(toggleMusic('./audio/earthbound.mp3'));
 
       AudioController.instance().hasPlayedForFirstTime = true;
     }
 
     this.pressedKeys[key] = true;
 
-    EventManager.instance().dispatch(fireKeyPress(key));
-    EventManager.instance().dispatch(pressedKeysUpdate(this.pressedKeys));
+    EventManager.dispatch(fireKeyPress(key));
+    EventManager.dispatch(pressedKeysUpdate(this.pressedKeys));
   }
 
   fireKeyUp(key) {
     this.pressedKeys[key] = false;
 
-    EventManager.instance().dispatch(pressedKeysUpdate(this.pressedKeys));
+    EventManager.dispatch(pressedKeysUpdate(this.pressedKeys));
   }
 
   isKeyPressed(key) {
