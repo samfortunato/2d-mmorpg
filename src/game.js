@@ -64,7 +64,10 @@ export class Game {
   }
 
   addPlayer() {
-    EntityManager.addEntity(new Player());
+    const player = new Player();
+
+    EntityManager.addEntity(player);
+    EntityManager.playerId = player.id;
   }
 
 }

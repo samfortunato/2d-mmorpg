@@ -1,5 +1,8 @@
 import { dispatchGameEvent, EventManager } from '../managers/event-manager';
 import { GlobalStateManager } from '../managers/global-state-manager';
+import { EntityManager } from '../managers/entity-manager';
+
+import { EmoteBubble } from '../entities/emote-bubble/emote-bubble';
 
 import { sendEmote, sendMessage } from '../actions/chat';
 import { enterCommand } from '../actions/command';
@@ -73,7 +76,7 @@ export class ChatController {
 
   parseEmotes(chatText, senderId) {
     let parsedText = chatText;
-    let urlOfFirstEmoteUsed;
+    let nameOfFirstEmoteUsed;
 
     const usedEmotes = new Set(chatText.match(EMOTE_MATCHER));
 
@@ -86,17 +89,18 @@ export class ChatController {
         parsedText = parsedText.replaceAll(emote, emoteHtml);
       }
 
-      urlOfFirstEmoteUsed = emoteUrl;
+      nameOfFirstEmoteUsed = emoteName;
     }
 
-    if (urlOfFirstEmoteUsed) dispatchGameEvent(sendEmote(urlOfFirstEmoteUsed, senderId));
+    // if (nameOfFirstEmoteUsed) dispatchGameEvent(sendEmote(nameOfFirstEmoteUsed, senderId));
+    if (nameOfFirstEmoteUsed) EmoteBubble.create(senderId, nameOfFirstEmoteUsed)
 
     return parsedText;
   }
 
   appendNewChatMessage(messageData) {
     let processedText = escapeHtml(messageData.text);
-    processedText = this.parseEmotes(processedText, messageData.id);
+    processedText = this.parseEmotes(processedText, messageData.id || EntityManager.getPlayer().id);
 
     const chatMessage = document.createElement('li');
     chatMessage.className = 'chat-text';

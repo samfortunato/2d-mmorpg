@@ -14,10 +14,10 @@ export function sendMessage(messageData) {
   };
 };
 
-export function sendEmote(emoteUrl, senderId) {
+export function sendEmote(emoteName, senderId) {
   return {
     type: SEND_EMOTE,
-    emoteUrl,
+    emoteName,
     senderId,
   };
 }

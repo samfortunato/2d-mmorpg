@@ -2,6 +2,7 @@ import { v4 as generateUuid } from 'uuid';
 
 export class EntityManager {
 
+  static playerId = '';
   static entityIds = [];
   static entities = {};
 
@@ -26,6 +27,10 @@ export class EntityManager {
     delete this.entities[entityId];
 
     this.entityIds = this.entityIds.filter(id => id !== entityId);
+  }
+
+  static getPlayer() {
+    return this.entities[this.playerId];
   }
 
 }
